@@ -14,7 +14,7 @@ type Props = {
   fields: any[];
 };
 
-export default function PostForm(props: Props) {
+export default function PublicHolidayForm(props: Props) {
   const item = props.item || {};
   const fields = props.fields;
 
