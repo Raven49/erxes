@@ -69,3 +69,34 @@ export type ResetMemberPasswordResponse = {
     variables: { _id: string; newPassword: string };
   }) => Promise<any>;
 };
+
+interface IStructureCommon {
+  _id: string;
+  title: string;
+  code: string;
+  supervisorId: string;
+  supervisor: IUser;
+}
+
+export interface IDepartment extends IStructureCommon {
+  description: string;
+  userIds: string[];
+  users: IUser;
+}
+
+export interface IUnit extends IStructureCommon {
+  departmentId: string;
+  description: string;
+  userIds: string[];
+  users: IUser;
+}
+
+export interface IBranch extends IStructureCommon {
+  address: string;
+  parentId: string;
+  userIds: string[];
+  users: IUser;
+}
+export interface IStructure extends IStructureCommon {
+  description?: string;
+}
