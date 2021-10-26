@@ -66,6 +66,10 @@ export const queries = `
   widgetsKnowledgeBaseArticles(topicId: String!, searchString: String) : [KnowledgeBaseArticle]
   widgetsKnowledgeBaseTopicDetail(_id: String!): KnowledgeBaseTopic
   widgetsGetEngageMessage(integrationId: String, customerId: String, visitorId: String, browserInfo: JSON!): ConversationMessage
+
+  widgetsProductCategory(_id: String!): ProductCategory
+  widgetsProductDetail(_id: String!): Product
+  widgetsIntegrationDetail(_id: String): Integration
 `;
 
 export const mutations = `
@@ -144,4 +148,15 @@ export const mutations = `
   widgetsKnowledgebaseDecReactionCount(articleId: String!, reactionChoice: String!): String
   widgetsLeadIncreaseViewCount(formId: String!): JSON
   widgetsSendTypingInfo(conversationId: String!, text: String): String
+
+  widgetsBookingConnect(_id: String): Integration
+
+  widgetsSaveBooking(
+    integrationId: String!
+    formId: String!
+    submissions: [FieldValueInput]
+    browserInfo: JSON!
+    cachedCustomerId: String
+    productId: String
+  ): SaveFormResponse
 `;

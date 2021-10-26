@@ -808,6 +808,7 @@ interface IIntegrationFactoryInput {
   isActive?: boolean;
   messengerData?: any;
   languageCode?: string;
+  bookingData?: any;
 }
 
 export const integrationFactory = async (
@@ -829,7 +830,13 @@ export const integrationFactory = async (
     isActive:
       params.isActive === undefined || params.isActive === null
         ? true
-        : params.isActive
+        : params.isActive,
+    bookingData: params.bookingData
+      ? params.bookingData
+      : {
+          name: 'Booking Data',
+          description: 'Booking description'
+        }
   };
 
   if (params.messengerData && !params.messengerData.timezone) {
