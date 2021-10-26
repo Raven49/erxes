@@ -18,6 +18,7 @@ on:
       - develop
       - apm
       - automations
+      - office-test
     paths:
       - 'ui/**'
       - '!ui/nginx/**'
