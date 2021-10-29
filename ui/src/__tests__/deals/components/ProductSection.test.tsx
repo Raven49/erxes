@@ -26,10 +26,10 @@ describe('ProductSection component', () => {
       categoryId: 'categoryId',
       category,
       code: '123',
+      productCount: 234,
+      minimiumCount: 1,
       unitPrice: 123,
-      supply: '',
-      productCount: 0,
-      minimiumCount: 0,
+      supply: 'supply',
       createdAt: new Date()
     },
     {
@@ -41,10 +41,10 @@ describe('ProductSection component', () => {
       categoryId: 'categoryId',
       category,
       code: '321',
-      unitPrice: 123,
-      supply: '',
-      productCount: 0,
-      minimiumCount: 0,
+      productCount: 235,
+      minimiumCount: 2,
+      unitPrice: 124,
+      supply: 'supply1',
       createdAt: new Date()
     }
   ];
