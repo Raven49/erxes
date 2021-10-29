@@ -9,12 +9,13 @@ import { saveBooking } from './utils';
 interface IState {
   activeRoute: string;
   activeBooking: IBookingData | null;
-  activeBlock: string | null;
-  activeFloor: string | null;
+  activeCategory: string | null;
   activeProduct: string | null;
   isFormVisible: boolean;
   isPopupVisible: boolean;
   isSubmitting?: boolean;
+
+  selectedItem: string;
 
   currentStatus: ICurrentStatus;
 }
@@ -23,8 +24,7 @@ interface IStore extends IState {
   goToIntro: () => void;
   goToBooking: (booking: IBookingData) => void;
   goToBookings: () => void;
-  goToBlock: (blockId: string) => void;
-  goToFloor: (floorId: string) => void;
+  goToCategory: (categoryId: string) => void;
   goToProduct: (productId: string) => void;
   getBooking: () => IBookingData;
   showForm: () => void;
@@ -47,13 +47,13 @@ export class AppProvider extends React.Component<{}, IState> {
     this.state = {
       activeRoute: 'INTRO',
       activeBooking: null,
-      activeBlock: null,
-      activeFloor: null,
+      activeCategory: null,
       activeProduct: null,
       isFormVisible: false,
       isPopupVisible: false,
       currentStatus: { status: 'INITIAL' },
-      isSubmitting: false
+      isSubmitting: false,
+      selectedItem: ''
     };
   }
 
@@ -67,35 +67,32 @@ export class AppProvider extends React.Component<{}, IState> {
   goToBooking = (booking: any) => {
     this.setState({
       activeRoute: 'BOOKING',
-      activeBooking: booking
+      activeBooking: booking,
+      selectedItem: ''
     });
   };
 
   goToBookings = () => {
     this.setState({
       activeRoute: 'BOOKING',
-      activeBlock: null
+      activeCategory: null,
+      selectedItem: ''
     });
   };
 
-  goToBlock = (blockId: any) => {
+  goToCategory = (categoryId: any) => {
     this.setState({
-      activeRoute: 'BLOCK_DETAIL',
-      activeBlock: blockId
-    });
-  };
-
-  goToFloor = (floorId: any) => {
-    this.setState({
-      activeRoute: 'FLOOR_DETAIL',
-      activeFloor: floorId
+      activeRoute: 'CATEGORY_DETAIL',
+      activeCategory: categoryId,
+      selectedItem: categoryId
     });
   };
 
   goToProduct = (productId: string) => {
     this.setState({
       activeRoute: 'PRODUCT_DETAIL',
-      activeProduct: productId
+      activeProduct: productId,
+      selectedItem: productId
     });
   };
 
@@ -185,9 +182,8 @@ export class AppProvider extends React.Component<{}, IState> {
           ...this.state,
           goToBooking: this.goToBooking,
           goToIntro: this.goToIntro,
-          goToBlock: this.goToBlock,
+          goToCategory: this.goToCategory,
           goToBookings: this.goToBookings,
-          goToFloor: this.goToFloor,
           goToProduct: this.goToProduct,
           getBooking: this.getBooking,
           showForm: this.showForm,

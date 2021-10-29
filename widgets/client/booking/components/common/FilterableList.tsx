@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RiArrowDownSFill, RiArrowRightSFill } from 'react-icons/ri';
 import { IStyle } from '../../types';
 
 type Props = {
@@ -10,8 +9,8 @@ type Props = {
   className?: string;
   treeView?: boolean;
   parentId?: string;
-
   styles: IStyle;
+  selectedItem?: string;
 
   changeRoute: (item: any) => void;
 
@@ -24,7 +23,6 @@ type State = {
   isOpen: boolean;
   key: string;
   items: any[];
-  selectedItem: any;
   parentIds: { [key: string]: boolean };
 };
 
@@ -36,7 +34,6 @@ class FilterableList extends React.Component<Props, State> {
       isOpen: false,
       key: '',
       items: props.items,
-      selectedItem: undefined,
       parentIds: {}
     };
   }
@@ -89,10 +86,28 @@ class FilterableList extends React.Component<Props, State> {
   };
 
   renderIcons(item: any, hasChildren: boolean, isOpen: boolean, color: string) {
+    const arrowsize = '0.3em';
+    const downTraingle = {
+      borderColor: `${color} transparent transparent transparent`,
+      borderStyle: 'solid',
+      borderWidth: `${arrowsize} ${arrowsize} 0px ${arrowsize}`,
+      height: '0px',
+      width: '0px'
+    };
+
+    const rightTraingle = {
+      borderColor: `transparent transparent transparent ${color}`,
+      borderStyle: 'solid',
+      borderWidth: `${arrowsize} 0px ${arrowsize} ${arrowsize}`,
+      height: '0px',
+      width: '0px'
+    };
+
     return hasChildren ? (
-      <>
-        {isOpen ? <RiArrowDownSFill /> : <RiArrowRightSFill />}
-      </>
+      <div>
+        {' '}
+        {isOpen ? <div style={downTraingle} /> : <div style={rightTraingle} />}
+      </div>
     ) : null;
   }
 
@@ -109,7 +124,7 @@ class FilterableList extends React.Component<Props, State> {
     if (key && item.name.toLowerCase().indexOf(key.toLowerCase()) < 0) {
       return false;
     }
-    const onClick = () => this.toggleItem(item._id);
+    const onClick = () => this.onToggle(item._id, isOpen);
 
     const isOpen = this.state.parentIds[item._id] || !!key;
 
@@ -122,23 +137,34 @@ class FilterableList extends React.Component<Props, State> {
     // tslint:disable-next-line: no-shadowed-variable
     const handleClick = (item: any) => {
       changeRoute(item);
-      this.setState({ selectedItem: item });
     };
 
     return (
-      <li key={item._id} className={`list flex-sb `}
+      <li
+        key={item._id}
+        className={`list flex-sb ${
+          item.status === 'disabled' || item.count === 0 ? 'card-disabled' : ''
+        }`}
         style={
-          this.state.selectedItem && item._id === this.state.selectedItem._id
+          item._id === this.props.selectedItem
             ? { fontWeight: 500, color: productSelected }
             : { fontWeight: 400, color }
         }
-        onClick={onClick}
       >
         <div className="flex-center">
-          <div className="toggle-nav" onClick={this.onToggle.bind(this, item._id, isOpen)}>
+          <div
+            className="toggle-nav"
+            onClick={() => this.onToggle(item._id, isOpen)}
+          >
             {this.renderIcons(item, hasChildren, isOpen, color)}
           </div>
-          <div className="mr-30" onClick={() => handleClick(item)}>
+          <div
+            style={{
+              fontSize: '1em',
+              marginRight: '2em'
+            }}
+            onClick={() => handleClick(item)}
+          >
             {item.name || '[undefined]'}
           </div>
         </div>
@@ -153,18 +179,14 @@ class FilterableList extends React.Component<Props, State> {
     const groupByParent = this.groupByParent(subFields);
     const childrens = groupByParent[parent._id];
 
-    const productCount = subFields.filter(
-      (el: any) => el.type === 'product' && el.parentIds.includes(parent._id)
-    );
-
-    let stockCnt = productCount ? productCount.length : 0;
+    const stockCnt = parent.count;
 
     if (childrens) {
       const isOpen = this.state.parentIds[parent._id] || !!this.state.key;
       return (
         <ul key={`parent-${parent._id}`}>
           {this.renderItem(parent, true, stockCnt)}
-          <li className="child-list">
+          <li className="child-list" key={`child-${parent._id}`}>
             {isOpen &&
               childrens.map((childparent: any) => {
                 return this.renderTree(childparent, subFields);
@@ -172,10 +194,6 @@ class FilterableList extends React.Component<Props, State> {
           </li>
         </ul>
       );
-    }
-
-    if (parent.type === 'product') {
-      stockCnt = 1;
     }
 
     return this.renderItem(parent, false, stockCnt);

@@ -27,6 +27,18 @@ export const types = `
     bookingData: BookingData
   }
 
+
+  type BookingTree {
+    _id: String
+    name: String
+    description: String
+    parentId: String
+    type: String
+    status: String
+    
+    count: Int
+  }
+
   type BookingData {
     name: String
     image: Attachment
@@ -40,9 +52,9 @@ export const types = `
 
     viewCount: Int
 
-    childCategories: [ProductCategory]
-    categoryTree: JSON
+    categoryTree: [BookingTree]
     mainProductCategory: ProductCategory
+    navigationText: String
   }
 
   type integrationsTotalCount {
@@ -104,6 +116,8 @@ export const types = `
     style: BookingStyleInput
    
     productCategoryId: String
+
+    navigationText: String
   }
 
   input MessengerOnlineHoursSchema {

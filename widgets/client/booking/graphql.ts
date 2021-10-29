@@ -29,6 +29,7 @@ const productFields = `
   sku
   
   createdAt
+  categoryId
 
   category {
     _id
@@ -124,17 +125,22 @@ const widgetsConnectMutation = `
           url
         }
         
-        childCategories {
-          ${productCategoryFields}
-        }
-
         mainProductCategory {
           ${productCategoryFields}
         }
+        navigationText
 
         productCategoryId
 
-        categoryTree
+        categoryTree {
+          _id
+          name
+          description
+          status
+          parentId
+          type
+          count
+        }
 
         style
 

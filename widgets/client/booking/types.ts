@@ -20,8 +20,11 @@ export interface IStyle {
 export interface ICategoryTree {
   _id: string;
   name: string;
+  description: string;
   parentId: string;
   type: string;
+  status?: string;
+  count: string;
 }
 
 export interface IBookingData {
@@ -33,8 +36,8 @@ export interface IBookingData {
   productCategoryId?: string;
   style: IStyle;
 
-  childCategories: IProductCategory[];
   categoryTree: ICategoryTree[];
+  navigationText: string;
 
   mainProductCategory: IProductCategory;
 }

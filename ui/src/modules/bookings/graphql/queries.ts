@@ -8,6 +8,8 @@ const bookingFields = `
   }
 
   viewCount
+  
+  navigationText
 
   description
   userFilters
@@ -16,11 +18,6 @@ const bookingFields = `
   style
   displayBlock
 
-  childCategories {
-    _id
-  }
-  
-  categoryTree
   
   mainProductCategory {
     _id

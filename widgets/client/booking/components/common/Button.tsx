@@ -1,23 +1,29 @@
 import * as React from 'react';
-import { HiArrowRight, HiArrowLeft } from 'react-icons/hi';
+
 type Props = {
-  text: string;
+  text: any;
   onClickHandler: () => void;
   color?: string;
   style?: {};
   type: string;
 };
+
 function Button({ text, type, onClickHandler, style }: Props) {
   return (
     <button
       type="button"
       className={`btn`}
-      onClick={onClickHandler}
+      onClick={() => onClickHandler()}
       style={style}
     >
-      {type === 'back' && <HiArrowLeft width="1,2em" strokeWidth="1.2px" />}
-      <div style={{ padding: '5px' }}>{`${text}`} </div>
-      {type === 'next' && <HiArrowRight width="1,2em" strokeWidth="1.2px" />}
+      {type === 'back' && (
+        <div style={{ fontSize: '1.3em', transform: 'rotate(180deg)' }}>
+          {' '}
+          &#10140;{' '}
+        </div>
+      )}
+      <div style={{ padding: '5px' }}>{`${text}`}</div>
+      {type === 'next' && <div style={{ fontSize: '1.3em' }}> &#10140; </div>}
     </button>
   );
 }
