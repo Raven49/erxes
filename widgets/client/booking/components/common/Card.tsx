@@ -13,25 +13,33 @@ type Props = {
 type State = {
   style: {};
   isSelected: boolean;
+  isDisabled: boolean;
   isAnotherCardSelected?: boolean;
 };
 
 class Card extends React.Component<Props, State> {
   constructor(props: any) {
     super(props);
+    const count: string = this.props.count!;
 
     this.state = {
       isSelected: false,
+      isDisabled: (this.props.status === 'disabled' || Number(count) === 0) ? true : false,
       style: {
         backgroundColor: this.props.style.productAvailable,
         color: '#fff',
         transition: 'all 0.2s'
       }
     };
+
   }
 
   onClick = () => {
-    if (this.state.isSelected === false) {
+    this.setState({
+      isSelected: !this.state.isSelected
+    });
+
+    if (this.state.isSelected === true  && this.state.isDisabled === false) {
       this.setState({
         style: {
           backgroundColor: this.props.style.productSelected,
@@ -45,38 +53,26 @@ class Card extends React.Component<Props, State> {
       this.setState({
         style: {
           backgroundColor: this.props.style.productAvailable,
-          color: '#fff',
-          transition: 'all 0.2s'
+          color: this.props.style.textAvailable,
+          transition: "all 0.2s",
         }
       });
     }
-    this.setState({
-      isSelected: !this.state.isSelected
-    });
+
   };
 
   render() {
-    if (this.props.isAnotherCardSelected === true) {
-      this.setState({
-        isSelected: false,
-        style: {
-          backgroundColor: this.props.style.productAvailable,
-          color: '#fff',
-          transition: 'all 0.2s'
-        }
-      });
+    const disabledStyle = {
+      pointEvents: "none",
+      backgroundColor: this.props.style.productUnavailable,
+      color: this.props.style.textUnavailable,
+      transition: "all 0.2s"
     }
 
-    const count: string = this.props.count!;
-    const status =
-      this.props.status === 'disabled' || Number(count) === 0 ? 'disabled' : '';
+    const style  = this.state.isDisabled === true ? disabledStyle : this.state.style
 
     return (
-      <div
-        onClick={this.onClick}
-        className={`card card-${status}`}
-        style={this.state.style}
-      >
+      <div onClick={this.onClick} className={`card`} style={style} >
         <h4> {this.props.title} </h4>
         <p> {this.props.description} </p>
       </div>
