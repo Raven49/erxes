@@ -10,17 +10,12 @@ export interface IStyle {
   itemShape?: string;
   widgetColor: string;
   productAvailable: string;
-  productUnavailable: string;
-  productSelected: string;
-
   textAvailable: string;
-  textUnavailable: string;
-  textSelected: string;
-
   line?: string;
   columns?: number;
   rows?: number;
   margin?: number;
+  baseFont?: string;
 }
 
 export interface IBookingIntegration extends IIntegration {
@@ -28,6 +23,39 @@ export interface IBookingIntegration extends IIntegration {
   tags: ITag[];
   createdUser: IUser;
 }
+
+export interface IBookingData {
+  name?: string;
+  image?: any;
+  description?: string;
+  userFilters?: string[];
+  productCategoryId?: string;
+  style?: IStyle;
+  mainProductCategory?: IProductCategory;
+  navigationText?: string;
+  bookingFormText?: string;
+
+  viewCount?: number;
+}
+
+export type IBooking = {
+  name: string;
+  description: string;
+  userFilters: string[];
+  image: any;
+  productCategoryId: string;
+  itemShape: string;
+  widgetColor: string;
+  productAvailable: string;
+  textAvailable: string;
+  line?: string;
+  columns?: number;
+  rows?: number;
+  margin?: number;
+  navigationText?: string;
+  bookingFormText?: string;
+  baseFont: string;
+};
 
 // query types
 export type BookingIntegrationsQueryResponse = {
@@ -38,20 +66,7 @@ export type BookingIntegrationDetailQueryResponse = {
   integrationDetail: IBookingIntegration;
 } & QueryResponse;
 
-export interface IBookingData {
-  // content
-  name?: string;
-  image?: any;
-  description?: string;
-  userFilters?: string[];
-  productCategoryId?: string;
-  style?: IStyle;
-  mainProductCategory?: IProductCategory;
-  navigationText?: string;
-
-  viewCount?: number;
-}
-
+// mutation types
 export type RemoveMutationVariables = {
   _id: string;
 };

@@ -1,80 +1,61 @@
-import * as React from 'react';
-import { IStyle } from '../../types';
+import * as React from "react";
+import { IStyle } from "../../types";
 
 type Props = {
   title: string;
   style: IStyle;
+  onClick: () => void;
   status?: string;
   count?: string;
   description?: string;
-  isAnotherCardSelected?: boolean;
 };
 
 type State = {
   style: {};
-  isSelected: boolean;
   isDisabled: boolean;
-  isAnotherCardSelected?: boolean;
 };
 
 class Card extends React.Component<Props, State> {
   constructor(props: any) {
     super(props);
-    const count: string = this.props.count!;
+
+    const count: string = props.count!;
+    const { productAvailable, itemShape } = props.style;
+
+    let borderRadius = "5px";
+
+    switch (itemShape) {
+      case "round":
+        borderRadius = "80px";
+        break;
+      case "circle":
+        borderRadius = "50%";
+        break;
+    }
 
     this.state = {
-      isSelected: false,
-      isDisabled: (this.props.status === 'disabled' || Number(count) === 0) ? true : false,
+      isDisabled:
+        props.status === "disabled" || parseInt(count, 10) === 0 ? true : false,
       style: {
-        backgroundColor: this.props.style.productAvailable,
-        color: '#fff',
-        transition: 'all 0.2s'
-      }
+        borderColor: productAvailable,
+        color: productAvailable,
+        borderRadius,
+      },
     };
-
   }
 
-  onClick = () => {
-    this.setState({
-      isSelected: !this.state.isSelected
-    });
-
-    if (this.state.isSelected === true  && this.state.isDisabled === false) {
-      this.setState({
-        style: {
-          backgroundColor: this.props.style.productSelected,
-          color: '#fff',
-          transition: 'all 0.2s'
-        }
-      });
-    }
-
-    if (this.state.isSelected === true) {
-      this.setState({
-        style: {
-          backgroundColor: this.props.style.productAvailable,
-          color: this.props.style.textAvailable,
-          transition: "all 0.2s",
-        }
-      });
-    }
-
-  };
-
   render() {
-    const disabledStyle = {
-      pointEvents: "none",
-      backgroundColor: this.props.style.productUnavailable,
-      color: this.props.style.textUnavailable,
-      transition: "all 0.2s"
-    }
-
-    const style  = this.state.isDisabled === true ? disabledStyle : this.state.style
+    const { isDisabled, style } = this.state;
+    const { title, description, onClick } = this.props;
 
     return (
-      <div onClick={this.onClick} className={`card`} style={style} >
-        <h4> {this.props.title} </h4>
-        <p> {this.props.description} </p>
+      <div
+        onClick={() => onClick()}
+        className={`card ${isDisabled ? "disabled" : ""}`}
+        style={style}
+      >
+        <h4>{title} </h4>
+        {description && <p> {description} </p>}
       </div>
     );
   }

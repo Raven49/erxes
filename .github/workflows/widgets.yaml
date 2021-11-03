@@ -12,7 +12,6 @@ on:
       - master
       - develop
       - apm
-      - property-booking
     paths:
       - 'widgets/**'
 

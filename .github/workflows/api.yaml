@@ -15,7 +15,6 @@ on:
       - apm
       - crons
       - workers
-      - property-booking
     paths:
       - 'api/**'
       - '.github/workflows/api.yaml'
