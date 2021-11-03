@@ -106,9 +106,8 @@ function BookingListContainer(props: FinalProps) {
     integrations
   };
 
-  // tslint:disable-next-line: no-shadowed-variable
-  const content = props => {
-    return <BookingList {...updatedProps} {...props} />;
+  const content = bulkProps => {
+    return <BookingList {...updatedProps} {...bulkProps} />;
   };
 
   return <Bulk content={content} refetch={refetch} />;

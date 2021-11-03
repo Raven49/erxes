@@ -1,12 +1,13 @@
-import * as React from 'react';
-
-import { FilterableList } from '.';
-import { IBookingData, ICategoryTree } from '../../types';
+import * as React from "react";
+import { IBookingData, ICategoryTree } from "../../types";
+import { iconClose } from "../../../icons/Icons";
+import FilterableList from "./FilterableList";
 type Props = {
   items: ICategoryTree[];
   parentId?: string;
-  changeRoute: (item: any) => void;
+  changeRoute: (treeItem: ICategoryTree) => void;
   booking?: IBookingData;
+  goToIntro?: () => void;
   selectedItem?: string;
 };
 
@@ -18,37 +19,38 @@ class Header extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      isOpen: false
+      isOpen: false,
     };
   }
 
   toggleNavigation = () => {
-    this.setState(prevState => ({
-      isOpen: !prevState.isOpen
+    this.setState((prevState) => ({
+      isOpen: !prevState.isOpen,
     }));
   };
 
   renderNav() {
-    const { items, parentId, changeRoute, booking, selectedItem } = this.props;
+    const {
+      items,
+      parentId,
+      changeRoute,
+      booking,
+      selectedItem,
+      goToIntro,
+    } = this.props;
 
     if (!booking) {
       return null;
     }
 
     const style = booking.style;
-    const navigationText = (booking && booking.navigationText) || 'Navigation';
+    const navigationText = (booking && booking.navigationText) || "Navigation";
 
     return (
       <div className={`booking-navigation bn-${style.widgetColor} slide-in`}>
         <div className="booking-header">
-          <h4>{navigationText}</h4>
-          <div
-            onClick={this.toggleNavigation}
-            style={{ fontSize: '1.3em', transform: 'rotate(180deg)' }}
-          >
-            {' '}
-            &#10140;{' '}
-          </div>
+          <h4 onClick={goToIntro}>{navigationText}</h4>
+          <div onClick={this.toggleNavigation}>{iconClose("#444")}</div>
         </div>
         <hr />
         <FilterableList
@@ -65,31 +67,26 @@ class Header extends React.Component<Props, State> {
   }
 
   render() {
-    const navigationText =
-      (this.props.booking && this.props.booking.navigationText) || 'Navigation';
+    const { goToIntro, booking } = this.props;
+
+    const navigationText = (booking && booking.navigationText) || "Navigation";
 
     return (
       <>
-        {this.state.isOpen === true ? this.renderNav() : ''}
-        <div className="header" onClick={this.toggleNavigation}>
+        {this.state.isOpen && this.renderNav()}
+        <div className="header">
           <div className="nav">
-            <Burger />
-            <div>{navigationText}</div>
+            <div className="hamburger" onClick={this.toggleNavigation}>
+              <span className="bar" />
+              <span className="bar" />
+              <span className="bar" />
+            </div>
+            <h4 onClick={goToIntro}>{navigationText}</h4>
           </div>
         </div>
       </>
     );
   }
 }
-
-const Burger = () => {
-  return (
-    <div className="hamburger">
-      <span className="bar" />
-      <span className="bar" />
-      <span className="bar" />
-    </div>
-  );
-};
 
 export default Header;

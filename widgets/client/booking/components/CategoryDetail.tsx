@@ -11,6 +11,7 @@ type Props = {
   booking?: IBookingData;
   goToCategory: (categoryId: string) => void;
   goToProduct: (productId: string) => void;
+  goToIntro: () => void;
 };
 
 type State = { activeChild: any };
@@ -18,6 +19,7 @@ type State = { activeChild: any };
 class CategoryDetail extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+
     this.state = {
       activeChild: {}
     };
@@ -29,14 +31,16 @@ class CategoryDetail extends React.Component<Props, State> {
       booking,
       goToBookings,
       goToCategory,
-      goToProduct
+      goToProduct,
+      goToIntro
     } = this.props;
 
     if (!category || !booking) {
       return null;
     }
 
-    const { categoryTree, style, description } = booking;
+    const { categoryTree, style } = booking;
+    const { name, attachment = {} } = category;
 
     // use this
     let childs = categoryTree.filter(
@@ -49,7 +53,6 @@ class CategoryDetail extends React.Component<Props, State> {
       );
     }
 
-    let isCardSelected = false;
     const sortedChilds = childs.sort((a, b) => a.name.localeCompare(b.name));
 
     const goNext = () => {
@@ -71,10 +74,8 @@ class CategoryDetail extends React.Component<Props, State> {
     };
 
     const selectCard = (el: any) => {
-      if (this.state.activeChild._id !== el._id) {
-        isCardSelected = true;
-      }
       this.setState({ activeChild: el });
+
       setTimeout(() => {
         goNext();
       }, 100);
@@ -82,38 +83,35 @@ class CategoryDetail extends React.Component<Props, State> {
 
     return (
       <>
-        <div className="container">
-          <h4> {category.name} </h4>
-          <p> {description} </p>
+        <>
+          <div className="title text-center">
+            <h4> {name}</h4>
+            <p className="text-center"> {category.description} </p>
+          </div>
 
-          <div className="flex-sa">
-            <div className="img-container w-50">
+          <div className="category-detail">
+            <div className="img-container mr-30">
               <img
-                src={readFile(category.attachment && category.attachment.url)}
-                alt={category.attachment && category.attachment.title}
+                src={readFile(attachment && attachment.url)}
+                alt={attachment && attachment.title}
                 style={{
                   maxHeight: '100%',
                   maxWidth: '100%'
                 }}
               />
             </div>
-            <div className={`w-50 flex-cards`}>
+            <div className={`flex-cards right-sidebar`}>
               {sortedChilds.map(el => {
                 return (
-                  // tslint:disable-next-line: jsx-key
-                  <div
-                    onClick={() => selectCard(el)}
-                    key={el._id}
-                    style={{ margin: '0.2em' }}
-                  >
+                  <React.Fragment key={el._id}>
                     <Card
                       title={el.name}
                       style={style}
                       status={el.status}
                       count={el.count}
-                      isAnotherCardSelected={isCardSelected}
+                      onClick={() => selectCard(el)}
                     />
-                  </div>
+                  </React.Fragment>
                 );
               })}
             </div>
@@ -127,12 +125,14 @@ class CategoryDetail extends React.Component<Props, State> {
                 category.parentId &&
                 category.parentId !== booking.productCategoryId
                   ? goToCategory(category.parentId)
-                  : goToBookings()
+                  : category.parentId === booking.productCategoryId
+                  ? goToBookings()
+                  : goToIntro()
               }
               style={{ backgroundColor: style.widgetColor, left: 0 }}
             />
           </div>
-        </div>
+        </>
       </>
     );
   }

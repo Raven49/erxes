@@ -33,11 +33,17 @@ export interface IBookingData {
   userFilters?: string[];
   image?: any;
 
-  productCategoryId?: string;
+  productCategoryId: string;
   style: IStyle;
 
   categoryTree: ICategoryTree[];
   navigationText: string;
+  bookingFormText: string;
 
   mainProductCategory: IProductCategory;
+}
+
+export interface IFieldDataWithText {
+  text: string;
+  value: string;
 }

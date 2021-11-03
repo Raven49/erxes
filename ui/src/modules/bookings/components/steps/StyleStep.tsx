@@ -18,30 +18,22 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import React from 'react';
 import { BOOKING_ITEM_SHAPE } from 'modules/bookings/constants';
 import { FlexContent } from 'modules/boards/styles/item';
+import { FONTS } from 'modules/settings/clientPortal/constants';
 
 type Name =
   | 'itemShape'
   | 'widgetColor'
-  | 'productAvailable'
-  | 'productUnavailable'
   | 'productSelected'
   | 'textAvailable'
-  | 'textUnavailable'
-  | 'textSelected';
+  | 'baseFont';
 
 type Props = {
   onChangeBooking: (name: Name, value: any) => void;
-
   itemShape: string;
   widgetColor: string;
-
   productAvailable: string;
-  productUnavailable: string;
-  productSelected: string;
-
   textAvailable: string;
-  textUnavailable: string;
-  textSelected: string;
+  baseFont: string;
 };
 
 function Style({
@@ -49,11 +41,8 @@ function Style({
   itemShape,
   widgetColor,
   productAvailable,
-  productUnavailable,
-  productSelected,
   textAvailable,
-  textUnavailable,
-  textSelected
+  baseFont
 }: Props) {
   const renderColorSelect = (item, color) => {
     const popoverBottom = (
@@ -100,59 +89,50 @@ function Style({
               />
             </FormGroup>
           </FlexItem>
+        </FlexContent>
 
-          <FlexItem hasSpace={true}>
+        <FlexContent>
+          <FlexItem>
             <FormGroup>
-              <ControlLabel>Widget Color</ControlLabel>
+              <ControlLabel>Base Font</ControlLabel>
+              <Select
+                placeholder="Please select a font"
+                value={baseFont}
+                options={FONTS.map(item => ({ label: item, value: item }))}
+                onChange={(e: any) =>
+                  onChangeBooking('baseFont', e ? e.value : null)
+                }
+              />
+            </FormGroup>
+          </FlexItem>
+        </FlexContent>
+
+        <SubHeading>
+          Colors
+          <span>Choose a widget main and navigation colors</span>
+        </SubHeading>
+
+        <FlexContent>
+          <FlexItem>
+            <FormGroup>
+              <ControlLabel>Main Widget Color</ControlLabel>
               <WidgetBackgrounds>
                 {renderColorSelect('widgetColor', widgetColor)}
               </WidgetBackgrounds>
             </FormGroup>
           </FlexItem>
-        </FlexContent>
 
-        <SubHeading>Product Colors</SubHeading>
-
-        <FlexContent>
           <FlexItem>
-            <ControlLabel>Available</ControlLabel>
+            <ControlLabel>Available Product Color</ControlLabel>
             <WidgetBackgrounds>
               {renderColorSelect('productAvailable', productAvailable)}
             </WidgetBackgrounds>
           </FlexItem>
-          <FlexItem>
-            <ControlLabel>Unavailable</ControlLabel>
-            <WidgetBackgrounds>
-              {renderColorSelect('productUnavailable', productUnavailable)}
-            </WidgetBackgrounds>
-          </FlexItem>
-          <FlexItem>
-            <ControlLabel>Selected</ControlLabel>
-            <WidgetBackgrounds>
-              {renderColorSelect('productSelected', productSelected)}
-            </WidgetBackgrounds>
-          </FlexItem>
-        </FlexContent>
 
-        <SubHeading>Text Colors</SubHeading>
-
-        <FlexContent>
           <FlexItem>
-            <ControlLabel>Available</ControlLabel>
+            <ControlLabel>Available Text Color</ControlLabel>
             <WidgetBackgrounds>
               {renderColorSelect('textAvailable', textAvailable)}
-            </WidgetBackgrounds>
-          </FlexItem>
-          <FlexItem>
-            <ControlLabel>Unavailable</ControlLabel>
-            <WidgetBackgrounds>
-              {renderColorSelect('textUnavailable', textUnavailable)}
-            </WidgetBackgrounds>
-          </FlexItem>
-          <FlexItem>
-            <ControlLabel>Select</ControlLabel>
-            <WidgetBackgrounds>
-              {renderColorSelect('textSelected', textSelected)}
             </WidgetBackgrounds>
           </FlexItem>
         </FlexContent>

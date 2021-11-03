@@ -45,8 +45,7 @@ function Row({ isChecked, toggleBulk, integration, remove, archive }: Props) {
     }
   };
 
-  // tslint:disable-next-line: no-shadowed-variable
-  const manageAction = integration => {
+  const manageAction = () => {
     return (
       <Link to={`/bookings/edit/${integration._id}`}>
         <Button id="skill-edit-skill" btnStyle="link">
@@ -106,8 +105,8 @@ function Row({ isChecked, toggleBulk, integration, remove, archive }: Props) {
       </WithPermission>
     );
   };
-  // tslint:disable-next-line: no-shadowed-variable
-  const renderEditAction = (integration: IBookingIntegration) => {
+
+  const renderEditAction = () => {
     const trigger = (
       <Button btnStyle="link">
         <Tip text={__('Install code')} placement="top">
@@ -124,7 +123,6 @@ function Row({ isChecked, toggleBulk, integration, remove, archive }: Props) {
         size="lg"
         trigger={trigger}
         content={content}
-        // isOpen={this.props.showCode}
         isAnimate={true}
       />
     );
@@ -178,8 +176,8 @@ function Row({ isChecked, toggleBulk, integration, remove, archive }: Props) {
 
       <td>
         <ActionButtons>
-          {manageAction(integration)}
-          {renderEditAction(integration)}
+          {manageAction()}
+          {renderEditAction()}
           {renderArchiveAction()}
           {renderUnarchiveAction()}
           {renderRemoveAction()}
